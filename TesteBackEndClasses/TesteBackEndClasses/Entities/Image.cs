@@ -7,8 +7,9 @@
 
 
         public int BuildingId { get; set; }
-        public IEnumerable<Building> Buildings{ get; } = new List<Building>();
+        public Building Building { get; set; }
 
-        public IEnumerable<Student> Students { get; } = new List<Student>();
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

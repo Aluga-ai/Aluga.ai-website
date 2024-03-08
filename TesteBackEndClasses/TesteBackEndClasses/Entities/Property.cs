@@ -8,7 +8,7 @@ namespace TesteBackEndClasses.Entities
         public string OwnerId { get; set; }
         public Owner Owner { get; set; }
 
-        public IEnumerable<User>? UsersLikes { get; } = new List<User>();
+        public IEnumerable<Student>? StudentsLikes { get; } = new List<Student>();
 
     }
 }

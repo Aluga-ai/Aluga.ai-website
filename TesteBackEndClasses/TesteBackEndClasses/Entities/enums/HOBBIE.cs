@@ -4,6 +4,8 @@
     {
         LIVROS,
         ESPORTES,
-        ESTUDAR
+        ESTUDAR,
+        SERIES,
+        COZINHAR
     }
 }

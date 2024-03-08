@@ -5,16 +5,16 @@ namespace TesteBackEndClasses.Entities
     public class Student : User
     {
 
-        public PERSONALITY Personality { get; set; }
-        public HOBBIE Hobbie { get; set; }
+        public IEnumerable<PERSONALITY> Personalitys { get; set; } = new List<PERSONALITY>();
+        public IEnumerable<HOBBIE> Hobbies { get; set; } = new List<HOBBIE>();
 
-        public IEnumerable<Student>? Connection { get;} = new List<Student>();
+        public IEnumerable<Student>? Connections { get;} = new List<Student>();
 
 
         public int CollegeId { get; set; }
         public College College { get; set; }
 
-        public IEnumerable<Property>? PropertyLikes { get; } = new List<Property>();
+        public IEnumerable<Property>? PropertiesLikes { get; } = new List<Property>();
 
     }
 }
