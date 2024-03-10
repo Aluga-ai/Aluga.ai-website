@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace BackEndASP.Services
+namespace BackEndASP.Interfaces
 {
-    public interface ITokenService
+    public interface ITokenRepository
     {
         JwtSecurityToken GenerateAccessToken(IEnumerable<Claim> claims, IConfiguration _config);
 

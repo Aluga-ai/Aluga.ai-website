@@ -1,6 +1,7 @@
 ﻿
-    public enum PERSONALITY
-    {
-        ORGANIZADO,
-        COMUNICATIVA    
+public enum PERSONALITY
+{
+    ORGANIZADO,
+    COMUNICATIVA
+}
 

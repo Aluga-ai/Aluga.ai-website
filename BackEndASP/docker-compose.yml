@@ -1,0 +1,34 @@
+version: '3.4'
+
+networks:
+  apialugaainetwork:
+
+services:
+  apialugaaidb:
+    container_name: apialugaaidb
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 8001:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=rootRoot@123
+    networks:
+      - apialugaainetwork
+  backendasp:
+    container_name: api-alugaai
+    image: ${DOCKER_REGISTRY-}backendasp
+    build:
+      context: .
+      dockerfile: BackEndASP/Dockerfile
+    ports:
+      - 8002:8080
+      - 8003:8081
+    depends_on:
+      - apialugaaidb
+    environment:
+      - DB_HOST=apialugaaidb
+      - DB_NAME=ApiAlugaai
+      - DB_SA_PASSWORD=rootRoot@123
+      - ASPNETCORE_URLS=http://+:8080
+    networks:
+      - apialugaainetwork

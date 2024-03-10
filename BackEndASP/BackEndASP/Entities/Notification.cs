@@ -5,7 +5,7 @@
 
         public string Text { get; set; }
 
-        public DateTimeOffset Moment = DateTimeOffset.Now;
+        public DateTimeOffset Moment { get; set; } = DateTimeOffset.Now;
 
         public bool Read { get; set; } = false;
 
