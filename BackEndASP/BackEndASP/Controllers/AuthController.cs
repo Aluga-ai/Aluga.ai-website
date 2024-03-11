@@ -34,7 +34,7 @@ using System.Security.Claims;
 
 
         [HttpPost("createRole/{roleName}")]
-
+        [Authorize(Policy = "AdminOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
