@@ -9,5 +9,6 @@
         public string Lat { get; set; }
         public string Long { get; set; }
 
-        public IEnumerable<Image> Images { get; } = new List<Image>();
-    }
+        public ICollection<Student> StudentsLiked { get; set; } = new List<Student>();
+
+}

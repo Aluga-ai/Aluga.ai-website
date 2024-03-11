@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndASP.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20240310230505_initial")]
-    partial class initial
+    [Migration("20240311215718_add-roles-in-seed")]
+    partial class addrolesinseed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,11 +35,6 @@ namespace BackEndASP.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("District")
                         .IsRequired()
@@ -69,9 +64,7 @@ namespace BackEndASP.Migrations
 
                     b.ToTable("Buildings");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Building");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Image", b =>
@@ -125,6 +118,26 @@ namespace BackEndASP.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Owner",
+                            NormalizedName = "OWNER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -298,11 +311,6 @@ namespace BackEndASP.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -368,16 +376,18 @@ namespace BackEndASP.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("College", b =>
                 {
                     b.HasBaseType("Building");
 
-                    b.HasDiscriminator().HasValue("College");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Colleges", (string)null);
                 });
 
             modelBuilder.Entity("Property", b =>
@@ -390,14 +400,14 @@ namespace BackEndASP.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.HasDiscriminator().HasValue("Property");
+                    b.ToTable("Properties", (string)null);
                 });
 
             modelBuilder.Entity("Owner", b =>
                 {
                     b.HasBaseType("User");
 
-                    b.HasDiscriminator().HasValue("Owner");
+                    b.ToTable("Owners", (string)null);
                 });
 
             modelBuilder.Entity("Student", b =>
@@ -407,12 +417,13 @@ namespace BackEndASP.Migrations
                     b.Property<int>("CollegeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CollegeId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Hobbies")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Personalitys")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
@@ -420,15 +431,17 @@ namespace BackEndASP.Migrations
 
                     b.HasIndex("CollegeId");
 
+                    b.HasIndex("CollegeId1");
+
                     b.HasIndex("StudentId");
 
-                    b.HasDiscriminator().HasValue("Student");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Image", b =>
                 {
                     b.HasOne("Building", "Building")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("BuildingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -526,14 +539,38 @@ namespace BackEndASP.Migrations
                     b.Navigation("Image");
                 });
 
+            modelBuilder.Entity("College", b =>
+                {
+                    b.HasOne("Building", null)
+                        .WithOne()
+                        .HasForeignKey("College", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Property", b =>
                 {
+                    b.HasOne("Building", null)
+                        .WithOne()
+                        .HasForeignKey("Property", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Owner", "Owner")
                         .WithMany("Properties")
                         .HasForeignKey("OwnerId")
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Owner", b =>
+                {
+                    b.HasOne("User", null)
+                        .WithOne()
+                        .HasForeignKey("Owner", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Student", b =>
@@ -543,16 +580,21 @@ namespace BackEndASP.Migrations
                         .HasForeignKey("CollegeId")
                         .IsRequired();
 
+                    b.HasOne("College", null)
+                        .WithMany("StudentsLiked")
+                        .HasForeignKey("CollegeId1");
+
+                    b.HasOne("User", null)
+                        .WithOne()
+                        .HasForeignKey("Student", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Student", null)
                         .WithMany("Connections")
                         .HasForeignKey("StudentId");
 
                     b.Navigation("College");
-                });
-
-            modelBuilder.Entity("Building", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Image", b =>
@@ -564,6 +606,8 @@ namespace BackEndASP.Migrations
             modelBuilder.Entity("College", b =>
                 {
                     b.Navigation("Students");
+
+                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Owner", b =>

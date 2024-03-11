@@ -1,6 +1,4 @@
 ﻿
-
-
 public class Property : Building
 {
         

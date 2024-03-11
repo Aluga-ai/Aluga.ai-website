@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -41,6 +42,19 @@ using Microsoft.EntityFrameworkCore.Storage;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+
+        modelBuilder.Entity<IdentityRole>().HasData(
+            new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
+            new IdentityRole { Id = "2", Name = "Student", NormalizedName = "STUDENT" },
+            new IdentityRole { Id = "3", Name = "Owner", NormalizedName = "OWNER" }
+        );
+
+
+        modelBuilder.Entity<College>().ToTable("Colleges");
+        modelBuilder.Entity<Property>().ToTable("Properties");
+        modelBuilder.Entity<Owner>().ToTable("Owners");
+        modelBuilder.Entity<Student>().ToTable("Students");
 
 
         modelBuilder.Entity<Image>()
