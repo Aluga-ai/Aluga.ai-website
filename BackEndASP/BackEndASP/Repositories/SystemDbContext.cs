@@ -29,14 +29,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 
     }
 
-        DbSet<Building> Buildings { get; set; }
-        DbSet<College> Colleges { get; set; }
-        DbSet<Image> Images { get; set; }
-        DbSet<Notification> Notifications { get; set; }
-        DbSet<Owner> Owners { get; set; }
-        DbSet<Property> Properties { get; set; }
-        DbSet<Student> Students { get; set; }
-        DbSet<User> Users { get; set; }
+        public DbSet<Building> Buildings { get; set; }
+        public DbSet<College> Colleges { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Owner> Owners { get; set; }
+        public DbSet<Property> Properties { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
 
     [Obsolete]
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,11 +50,11 @@ using Microsoft.EntityFrameworkCore.Storage;
             new IdentityRole { Id = "3", Name = "Owner", NormalizedName = "OWNER" }
         );
 
-
-        modelBuilder.Entity<College>().ToTable("Colleges");
-        modelBuilder.Entity<Property>().ToTable("Properties");
-        modelBuilder.Entity<Owner>().ToTable("Owners");
-        modelBuilder.Entity<Student>().ToTable("Students");
+        
+        //modelBuilder.Entity<College>().ToTable("Colleges");
+        //modelBuilder.Entity<Property>().ToTable("Properties");
+        //modelBuilder.Entity<Owner>().ToTable("Owners");
+        //modelBuilder.Entity<Student>().ToTable("Students");
 
 
         modelBuilder.Entity<Image>()
@@ -70,15 +70,18 @@ using Microsoft.EntityFrameworkCore.Storage;
             .HasForeignKey(s => s.CollegeId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        modelBuilder.Entity<Student>()
-            .HasMany(s => s.PropertiesLiked)
-            .WithMany(p => p.StudentsLiked);
-
         modelBuilder.Entity<Property>()
             .HasOne(p => p.Owner)
             .WithMany(o => o.Properties)
             .HasForeignKey(p => p.OwnerId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        modelBuilder.Entity<Owner>()
+            .HasMany(o => o.Properties)
+            .WithOne(p => p.Owner)
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+
 
 
 

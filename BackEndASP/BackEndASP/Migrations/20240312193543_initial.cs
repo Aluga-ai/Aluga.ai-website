@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackEndASP.Migrations
 {
     /// <inheritdoc />
-    public partial class addrolesinseed : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,25 +25,6 @@ namespace BackEndASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Buildings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HomeComplement = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lat = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Long = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Buildings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,40 +64,48 @@ namespace BackEndASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Colleges",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Colleges", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Colleges_Buildings_Id",
-                        column: x => x.Id,
-                        principalTable: "Buildings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    BuildingId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_Images_Buildings_BuildingId",
-                        column: x => x.BuildingId,
-                        principalTable: "Buildings",
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -129,6 +118,12 @@ namespace BackEndASP.Migrations
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Personalitys = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Hobbies = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CollegeId = table.Column<int>(type: "int", nullable: true),
+                    BuildingId = table.Column<int>(type: "int", nullable: true),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -148,75 +143,10 @@ namespace BackEndASP.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
+                        name: "FK_AspNetUsers_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +167,40 @@ namespace BackEndASP.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Buildings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeComplement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Lat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Long = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Buildings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Buildings_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Buildings_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -264,102 +228,22 @@ namespace BackEndASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Owners",
+                name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    BuildingId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Owners", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Owners_AspNetUsers_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Personalitys = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Hobbies = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CollegeId = table.Column<int>(type: "int", nullable: false),
-                    CollegeId1 = table.Column<int>(type: "int", nullable: true),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_AspNetUsers_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Colleges_CollegeId",
-                        column: x => x.CollegeId,
-                        principalTable: "Colleges",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Students_Colleges_CollegeId1",
-                        column: x => x.CollegeId1,
-                        principalTable: "Colleges",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Students_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Properties",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Properties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Properties_Buildings_Id",
-                        column: x => x.Id,
+                        name: "FK_Images_Buildings_BuildingId",
+                        column: x => x.BuildingId,
                         principalTable: "Buildings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Properties_Owners_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Owners",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PropertyStudent",
-                columns: table => new
-                {
-                    PropertiesLikedId = table.Column<int>(type: "int", nullable: false),
-                    StudentsLikedId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PropertyStudent", x => new { x.PropertiesLikedId, x.StudentsLikedId });
-                    table.ForeignKey(
-                        name: "FK_PropertyStudent_Properties_PropertiesLikedId",
-                        column: x => x.PropertiesLikedId,
-                        principalTable: "Properties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PropertyStudent_Students_StudentsLikedId",
-                        column: x => x.StudentsLikedId,
-                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -407,6 +291,16 @@ namespace BackEndASP.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_BuildingId",
+                table: "AspNetUsers",
+                column: "BuildingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CollegeId",
+                table: "AspNetUsers",
+                column: "CollegeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_ImageId",
                 table: "AspNetUsers",
                 column: "ImageId",
@@ -414,11 +308,26 @@ namespace BackEndASP.Migrations
                 filter: "[ImageId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_StudentId",
+                table: "AspNetUsers",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Buildings_OwnerId",
+                table: "Buildings",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Buildings_StudentId",
+                table: "Buildings",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_BuildingId",
@@ -430,35 +339,63 @@ namespace BackEndASP.Migrations
                 table: "NotificationUser",
                 column: "UsersId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Properties_OwnerId",
-                table: "Properties",
-                column: "OwnerId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_PropertyStudent_StudentsLikedId",
-                table: "PropertyStudent",
-                column: "StudentsLikedId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_CollegeId",
-                table: "Students",
-                column: "CollegeId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_CollegeId1",
-                table: "Students",
-                column: "CollegeId1");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Buildings_BuildingId",
+                table: "AspNetUsers",
+                column: "BuildingId",
+                principalTable: "Buildings",
+                principalColumn: "Id");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_StudentId",
-                table: "Students",
-                column: "StudentId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Buildings_CollegeId",
+                table: "AspNetUsers",
+                column: "CollegeId",
+                principalTable: "Buildings",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Images_ImageId",
+                table: "AspNetUsers",
+                column: "ImageId",
+                principalTable: "Images",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Buildings_AspNetUsers_OwnerId",
+                table: "Buildings");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Buildings_AspNetUsers_StudentId",
+                table: "Buildings");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -478,25 +415,10 @@ namespace BackEndASP.Migrations
                 name: "NotificationUser");
 
             migrationBuilder.DropTable(
-                name: "PropertyStudent");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Notifications");
-
-            migrationBuilder.DropTable(
-                name: "Properties");
-
-            migrationBuilder.DropTable(
-                name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "Owners");
-
-            migrationBuilder.DropTable(
-                name: "Colleges");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

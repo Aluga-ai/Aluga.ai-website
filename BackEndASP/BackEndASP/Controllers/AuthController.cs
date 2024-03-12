@@ -22,18 +22,20 @@ using System.Security.Claims;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly SystemDbContext _dbContext;
 
-        public AuthController(ITokenRepository tokenRepository, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
-        {
-            _tokenRepository = tokenRepository;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
-        }
+    public AuthController(ITokenRepository tokenRepository, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUnitOfWorkRepository unitOfWorkRepository, SystemDbContext dbContext)
+    {
+        _tokenRepository = tokenRepository;
+        _userManager = userManager;
+        _roleManager = roleManager;
+        _configuration = configuration;
+        _dbContext = dbContext;
+    }
 
 
 
-        [HttpPost("createRole/{roleName}")]
+    [HttpPost("createRole/{roleName}")]
         [Authorize(Policy = "AdminOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -226,8 +228,6 @@ using System.Security.Claims;
                 PhoneNumberConfirmed = false
             };
 
-         
-
             // Tenta criar o usuário
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
@@ -242,6 +242,8 @@ using System.Security.Claims;
             }
 
             await _userManager.AddToRoleAsync(user, "Student");
+
+
 
             return StatusCode(StatusCodes.Status201Created, new ResponseDTO
             {
@@ -276,7 +278,7 @@ using System.Security.Claims;
         }
 
 
-        // Cria uma nova instância de ApplicationUser com os dados fornecidos
+        // Cria uma nova instância de Owner e salva no DB com os dados fornecidos
         User user = new()
         {
             Email = registerDTO.Email,
@@ -285,7 +287,6 @@ using System.Security.Claims;
             PhoneNumber = registerDTO.PhoneNumber,
             PhoneNumberConfirmed = false
         };
-
 
 
         // Tenta criar o usuário
@@ -303,6 +304,7 @@ using System.Security.Claims;
 
         await _userManager.AddToRoleAsync(user, "Owner");
 
+     
         return StatusCode(StatusCodes.Status201Created, new ResponseDTO
         {
             Status = "Success",

@@ -33,6 +33,11 @@ namespace BackEndASP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
                     b.Property<string>("District")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -53,6 +58,10 @@ namespace BackEndASP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -61,7 +70,9 @@ namespace BackEndASP.Migrations
 
                     b.ToTable("Buildings");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Building");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Image", b =>
@@ -281,21 +292,6 @@ namespace BackEndASP.Migrations
                     b.ToTable("NotificationUser");
                 });
 
-            modelBuilder.Entity("PropertyStudent", b =>
-                {
-                    b.Property<int>("PropertiesLikedId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentsLikedId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PropertiesLikedId", "StudentsLikedId");
-
-                    b.HasIndex("StudentsLikedId");
-
-                    b.ToTable("PropertyStudent");
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<string>("Id")
@@ -307,6 +303,11 @@ namespace BackEndASP.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -373,7 +374,9 @@ namespace BackEndASP.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("College", b =>
@@ -384,7 +387,7 @@ namespace BackEndASP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Colleges", (string)null);
+                    b.HasDiscriminator().HasValue("College");
                 });
 
             modelBuilder.Entity("Property", b =>
@@ -395,26 +398,31 @@ namespace BackEndASP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Properties", (string)null);
+                    b.HasIndex("StudentId");
+
+                    b.HasDiscriminator().HasValue("Property");
                 });
 
             modelBuilder.Entity("Owner", b =>
                 {
                     b.HasBaseType("User");
 
-                    b.ToTable("Owners", (string)null);
+                    b.HasDiscriminator().HasValue("Owner");
                 });
 
             modelBuilder.Entity("Student", b =>
                 {
                     b.HasBaseType("User");
 
-                    b.Property<int>("CollegeId")
+                    b.Property<int?>("BuildingId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CollegeId1")
+                    b.Property<int>("CollegeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Hobbies")
@@ -426,13 +434,13 @@ namespace BackEndASP.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("CollegeId");
+                    b.HasIndex("BuildingId");
 
-                    b.HasIndex("CollegeId1");
+                    b.HasIndex("CollegeId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Students", (string)null);
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("Image", b =>
@@ -512,21 +520,6 @@ namespace BackEndASP.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PropertyStudent", b =>
-                {
-                    b.HasOne("Property", null)
-                        .WithMany()
-                        .HasForeignKey("PropertiesLikedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsLikedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.HasOne("Image", "Image")
@@ -536,55 +529,30 @@ namespace BackEndASP.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("College", b =>
-                {
-                    b.HasOne("Building", null)
-                        .WithOne()
-                        .HasForeignKey("College", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Property", b =>
                 {
-                    b.HasOne("Building", null)
-                        .WithOne()
-                        .HasForeignKey("Property", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Owner", "Owner")
                         .WithMany("Properties")
                         .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.HasOne("Student", null)
+                        .WithMany("PropertiesLiked")
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Owner", b =>
-                {
-                    b.HasOne("User", null)
-                        .WithOne()
-                        .HasForeignKey("Owner", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Student", b =>
                 {
+                    b.HasOne("Building", null)
+                        .WithMany("StudentsLiked")
+                        .HasForeignKey("BuildingId");
+
                     b.HasOne("College", "College")
                         .WithMany("Students")
                         .HasForeignKey("CollegeId")
-                        .IsRequired();
-
-                    b.HasOne("College", null)
-                        .WithMany("StudentsLiked")
-                        .HasForeignKey("CollegeId1");
-
-                    b.HasOne("User", null)
-                        .WithOne()
-                        .HasForeignKey("Student", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Student", null)
@@ -592,6 +560,11 @@ namespace BackEndASP.Migrations
                         .HasForeignKey("StudentId");
 
                     b.Navigation("College");
+                });
+
+            modelBuilder.Entity("Building", b =>
+                {
+                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Image", b =>
@@ -603,8 +576,6 @@ namespace BackEndASP.Migrations
             modelBuilder.Entity("College", b =>
                 {
                     b.Navigation("Students");
-
-                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Owner", b =>
@@ -615,6 +586,8 @@ namespace BackEndASP.Migrations
             modelBuilder.Entity("Student", b =>
                 {
                     b.Navigation("Connections");
+
+                    b.Navigation("PropertiesLiked");
                 });
 #pragma warning restore 612, 618
         }

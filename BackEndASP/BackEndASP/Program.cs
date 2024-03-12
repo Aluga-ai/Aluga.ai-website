@@ -1,4 +1,5 @@
 using BackEndASP.Interfaces;
+using BackEndASP.Services;
 using DSLearn.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=True";
 builder.Services.AddDbContext<SystemDbContext>(opt => opt.UseSqlServer(connectionString));
+//builder.Configuration.GetConnectionString("DefaultConnection"))
 /* ===================================== */
 
 
@@ -35,8 +37,10 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 
-
+builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWork>();
 builder.Services.AddScoped<ITokenRepository, TokenService>();
+builder.Services.AddScoped<IPropertyRepository, PropertyService>();
+
 
 
 
