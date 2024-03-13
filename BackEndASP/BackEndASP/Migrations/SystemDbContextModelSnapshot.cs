@@ -453,6 +453,10 @@ namespace BackEndASP.Migrations
                     b.Property<string>("Hobbies")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PendentsConnectionsId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Personalitys")
                         .HasColumnType("nvarchar(max)");
 

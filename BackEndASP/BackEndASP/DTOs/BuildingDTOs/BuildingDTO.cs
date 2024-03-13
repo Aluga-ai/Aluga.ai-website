@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BackEndASP.DTOs
+namespace BackEndASP.DTOs.BuildingDTOs
 {
     public class BuildingDTO
     {
@@ -16,24 +16,24 @@ namespace BackEndASP.DTOs
 
         public BuildingDTO()
         {
-            
+
         }
 
         public BuildingDTO(Building entity)
         {
-            
-            this.Id = entity.Id;
-            this.Address = entity.Address;
-            this.Number = entity.Number;
-            this.HomeComplement = entity.HomeComplement;
-            this.Neighborhood = entity.Neighborhood;
-            this.District = entity.District;
-            this.State = entity.State;
-            this.Lat = entity.Lat;
-            this.Long = entity.Long;
+
+            Id = entity.Id;
+            Address = entity.Address;
+            Number = entity.Number;
+            HomeComplement = entity.HomeComplement;
+            Neighborhood = entity.Neighborhood;
+            District = entity.District;
+            State = entity.State;
+            Lat = entity.Lat;
+            Long = entity.Long;
 
         }
 
-      
+
     }
 }

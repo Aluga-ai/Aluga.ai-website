@@ -1,4 +1,4 @@
-﻿using BackEndASP.DTOs;
+﻿using BackEndASP.DTOs.BuildingDTOs;
 using BackEndASP.ExternalAPI;
 using BackEndASP.ExternalAPI.GeoCoder;
 using BackEndASP.Interfaces;

@@ -1,7 +1,7 @@
 ﻿using BackEndASP.ExternalAPI;
 using Correios.NET.Models;
 
-namespace BackEndASP.DTOs
+namespace BackEndASP.DTOs.BuildingDTOs
 {
     public class BuildingResponseDTO
     {
@@ -14,26 +14,26 @@ namespace BackEndASP.DTOs
 
         public BuildingResponseDTO()
         {
-            
+
         }
 
         public BuildingResponseDTO(Building entity)
         {
-            
-            this.Address = entity.Address;
-            this.Neighborhood = entity.Neighborhood;
-            this.District = entity.District;
-            this.State = entity.State;
+
+            Address = entity.Address;
+            Neighborhood = entity.Neighborhood;
+            District = entity.District;
+            State = entity.State;
 
         }
 
 
         public BuildingResponseDTO(Address entity)
         {
-            this.Address = entity.Street;
-            this.Neighborhood = entity.District;
-            this.District = entity.City;
-            this.State = entity.State;
+            Address = entity.Street;
+            Neighborhood = entity.District;
+            District = entity.City;
+            State = entity.State;
         }
 
     }

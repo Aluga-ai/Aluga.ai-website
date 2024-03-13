@@ -1,4 +1,4 @@
-﻿namespace BackEndASP.DTOs
+﻿namespace BackEndASP.DTOs.BuildingDTOs
 {
     public class BuildingInsertDTO
     {

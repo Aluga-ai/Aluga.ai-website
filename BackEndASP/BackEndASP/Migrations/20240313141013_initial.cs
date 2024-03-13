@@ -121,6 +121,7 @@ namespace BackEndASP.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Personalitys = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hobbies = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PendentsConnectionsId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CollegeId = table.Column<int>(type: "int", nullable: true),
                     BuildingId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

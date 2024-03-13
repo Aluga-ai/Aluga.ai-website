@@ -1,4 +1,4 @@
-﻿using BackEndASP.DTOs;
+﻿using BackEndASP.DTOs.BuildingDTOs;
 using BackEndASP.Interfaces;
 using Correios.NET.Models;
 using Microsoft.AspNetCore.Authorization;

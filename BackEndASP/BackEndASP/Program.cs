@@ -40,6 +40,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWork>();
 builder.Services.AddScoped<ITokenRepository, TokenService>();
 builder.Services.AddScoped<IPropertyRepository, PropertyService>();
+builder.Services.AddScoped<IStudentRepository, StudentService>();
 
 
 
@@ -115,7 +116,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "DSCommerce",
+        Title = "Aluga.ai",
         Version = "v1",
         Contact = new OpenApiContact
         {

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndASP.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20240313004542_initial")]
+    [Migration("20240313141013_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -454,6 +454,10 @@ namespace BackEndASP.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Hobbies")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PendentsConnectionsId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Personalitys")

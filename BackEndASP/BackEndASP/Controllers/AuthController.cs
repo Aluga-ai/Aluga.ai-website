@@ -1,5 +1,4 @@
-﻿
-using ApiCatalogo.Dtos;
+﻿using BackEndASP.DTOs.AuthDTOs;
 using BackEndASP.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 
-    [Route("/auth")]
+[Route("/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -219,7 +218,7 @@ using System.Security.Claims;
 
 
             // Cria uma nova instância de ApplicationUser com os dados fornecidos
-            User user = new()
+            Student user = new()
             {
                 Email = registerDTO.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
@@ -279,7 +278,7 @@ using System.Security.Claims;
 
 
         // Cria uma nova instância de Owner e salva no DB com os dados fornecidos
-        User user = new()
+        Owner user = new()
         {
             Email = registerDTO.Email,
             SecurityStamp = Guid.NewGuid().ToString(),

@@ -1,4 +1,4 @@
-﻿namespace ApiCatalogo.Dtos
+﻿namespace BackEndASP.DTOs.AuthDTOs
 {
     public class RevokeDTO
     {

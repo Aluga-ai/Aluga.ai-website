@@ -7,6 +7,7 @@ using BackEndASP.Services;
 public class UnitOfWork : IUnitOfWorkRepository
     {
         private IPropertyRepository _propertyRepository;
+        private IStudentRepository _studentRepository;
 
         private SystemDbContext _dbContext;
 
@@ -28,7 +29,7 @@ public class UnitOfWork : IUnitOfWorkRepository
 
     public IPropertyRepository PropertyRepository { get { return _propertyRepository = _propertyRepository ?? new PropertyService(_dbContext); } }
 
-    public IStudentRepository StudentRepository => throw new NotImplementedException();
+    public IStudentRepository StudentRepository { get { return _studentRepository = _studentRepository ?? new StudentService(_dbContext); } }
 
     public async Task CommitAsync()
         {
