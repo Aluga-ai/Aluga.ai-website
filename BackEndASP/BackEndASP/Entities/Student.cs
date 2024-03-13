@@ -1,9 +1,12 @@
-﻿public class Student : User
+﻿using BackEndASP.Entities;
+
+public class Student : User
 {
     public List<PERSONALITY>? Personalitys { get; set; } = new List<PERSONALITY>();
     public List<HOBBIE>? Hobbies { get; set; } = new List<HOBBIE>();
-    public IEnumerable<Student>? Connections { get; set; } = new List<Student>();
+    public List<UserConnection>? Connections { get; set; } = new List<UserConnection>();
     public int CollegeId { get; set; }
     public College College { get; set; }
-    public IEnumerable<Property>? PropertiesLiked { get; set; } = new List<Property>();
+    public List<PropertyStudent>? StudentProperties { get; set; } = new List<PropertyStudent>();
+
 }

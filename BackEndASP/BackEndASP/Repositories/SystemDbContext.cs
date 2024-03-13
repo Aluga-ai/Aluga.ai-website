@@ -1,4 +1,5 @@
 ﻿
+using BackEndASP.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,9 @@ using Microsoft.EntityFrameworkCore.Storage;
         public DbSet<Property> Properties { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PropertyStudent> StudentProperties { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
+
 
     [Obsolete]
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -82,10 +86,35 @@ using Microsoft.EntityFrameworkCore.Storage;
             .OnDelete(DeleteBehavior.ClientCascade);
 
 
+        modelBuilder.Entity<PropertyStudent>()
+            .HasKey(sp => new { sp.StudentId, sp.PropertyId });
+
+        modelBuilder.Entity<PropertyStudent>()
+            .HasOne(sp => sp.Student)
+            .WithMany(s => s.StudentProperties)
+            .HasForeignKey(sp => sp.StudentId);
+
+        modelBuilder.Entity<PropertyStudent>()
+            .HasOne(sp => sp.Property)
+            .WithMany(p => p.StudentProperties)
+            .HasForeignKey(sp => sp.PropertyId);
 
 
+        modelBuilder.Entity<UserConnection>()
+            .HasKey(uc => new { uc.StudentId, uc.OtherStudentId });
 
+        modelBuilder.Entity<Student>()
+            .HasMany(s => s.Connections)
+            .WithOne(c => c.Student)
+            .HasForeignKey(c => c.StudentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        //
+        modelBuilder.Entity<UserConnection>()
+            .HasOne(uc => uc.OtherStudent)
+            .WithMany()
+            .HasForeignKey(uc => uc.OtherStudentId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 }
