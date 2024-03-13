@@ -113,7 +113,7 @@ namespace BackEndASP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BuildingId")
+                    b.Property<int?>("BuildingId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("ImageData")
@@ -121,7 +121,6 @@ namespace BackEndASP.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -414,7 +413,6 @@ namespace BackEndASP.Migrations
                     b.HasBaseType("Building");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("College");
@@ -425,7 +423,6 @@ namespace BackEndASP.Migrations
                     b.HasBaseType("Building");
 
                     b.Property<string>("OwnerId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasIndex("OwnerId");
@@ -447,14 +444,13 @@ namespace BackEndASP.Migrations
                     b.Property<int?>("BuildingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CollegeId")
+                    b.Property<int?>("CollegeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Hobbies")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PendentsConnectionsId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Personalitys")
@@ -509,9 +505,7 @@ namespace BackEndASP.Migrations
                 {
                     b.HasOne("Building", "Building")
                         .WithMany()
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BuildingId");
 
                     b.Navigation("Building");
                 });
@@ -596,8 +590,7 @@ namespace BackEndASP.Migrations
                     b.HasOne("Owner", "Owner")
                         .WithMany("Properties")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("Owner");
                 });
@@ -610,8 +603,7 @@ namespace BackEndASP.Migrations
 
                     b.HasOne("College", "College")
                         .WithMany("Students")
-                        .HasForeignKey("CollegeId")
-                        .IsRequired();
+                        .HasForeignKey("CollegeId");
 
                     b.Navigation("College");
                 });
@@ -623,8 +615,7 @@ namespace BackEndASP.Migrations
 
             modelBuilder.Entity("Image", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("College", b =>

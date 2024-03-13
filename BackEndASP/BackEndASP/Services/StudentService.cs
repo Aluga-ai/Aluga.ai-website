@@ -16,6 +16,7 @@ namespace BackEndASP.Services
             _dbContext = dbContext;
         }
 
+        // busca todas minhas conexões
         public StudentsConnectionsDTO FindAllMyStudentsConnections(string userId)
         {
             Student student = _dbContext.Students
@@ -26,6 +27,7 @@ namespace BackEndASP.Services
             return new StudentsConnectionsDTO(student.Connections);
         }
 
+        //busca todas as solicitações que eu tenho pendente
         public StudentsConnectionsDTO FindMyAllStudentsWhoInvitationsConnections(string userId)
         {
             Student student = _dbContext.Students.AsNoTracking().FirstOrDefault(s => s.Id == userId)

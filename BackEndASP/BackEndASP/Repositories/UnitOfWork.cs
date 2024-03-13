@@ -8,6 +8,7 @@ public class UnitOfWork : IUnitOfWorkRepository
     {
         private IPropertyRepository _propertyRepository;
         private IStudentRepository _studentRepository;
+        private IImageRepository _imageRepository;
 
         private SystemDbContext _dbContext;
 
@@ -21,7 +22,7 @@ public class UnitOfWork : IUnitOfWorkRepository
 
     public ICollegeRepository CollegeRepository => throw new NotImplementedException();
 
-    public IImageRepository ImageRepository => throw new NotImplementedException();
+    public IImageRepository ImageRepository { get { return _imageRepository = _imageRepository ?? new ImageService(_dbContext); } }
 
     public INotificationRepository NotificationRepository => throw new NotImplementedException();
 

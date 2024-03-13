@@ -51,6 +51,8 @@ namespace BackEndASP.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 await _unitOfWorkRepository.StudentRepository.GiveConnectionOrder(userId, studentForConnectionId);
                 await _unitOfWorkRepository.CommitAsync();
+
+                // QUANDO TIVER O GETBYID REFATORAR AQUI PARA CREATEDATACTION
                 return Ok("Order sent successfully");
             }
             catch (ArgumentException ex)
