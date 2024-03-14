@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Storage;
         public SystemDbContext(DbContextOptions<SystemDbContext> option) : base(option) 
         {
 
+        // DOCKER APLICAR MIGRATIONS
         try
         {
             var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;

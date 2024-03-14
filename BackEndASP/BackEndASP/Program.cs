@@ -20,7 +20,7 @@ var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=True";
-builder.Services.AddDbContext<SystemDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<SystemDbContext>(opt => opt.UseSqlServer(connectionString));
 //builder.Configuration.GetConnectionString("DefaultConnection"))
 /* ===================================== */
 
@@ -131,7 +131,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////// DOCKER
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<SystemDbContext>();
@@ -163,6 +163,9 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 // Configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 ﻿using BackEndASP.DTOs.ImageDTOs;
 using BackEndASP.Interfaces;
+using BackEndASP.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
@@ -25,12 +26,26 @@ namespace BackEndASP.Services
             User user = _dbContext.Users.AsNoTracking().FirstOrDefault(s => s.Id == userId)
                 ?? throw new ArgumentException($"This id {userId} does not exist");
 
+            // imagem aceitando apenas essas extensões
+            string fileExtension = Path.GetExtension(dto.Image.FileName).ToLower();
+
+            if (!MyImageExtensionAllowed.extensions.Contains(fileExtension))
+            {
+                throw new ArgumentException($"Only JPEG, JPG, and PNG images are allowed. Your image have {fileExtension} extension");
+            }
+            //
+
+            // imagem com no max 2mb
+            if (dto.Image.Length > 2 * 1024 * 1024) 
+            {
+                throw new ArgumentException("Image size must be less than 2MB.");
+            }
+            //
 
             using (var memoryStream = new MemoryStream())
             {
                 await dto.Image.CopyToAsync(memoryStream);
 
-                // Save image data to the database
                 var imageEntity = new Image
                 {
                     ImageData = memoryStream.ToArray(),
