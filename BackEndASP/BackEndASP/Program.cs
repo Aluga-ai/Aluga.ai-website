@@ -42,6 +42,7 @@ builder.Services.AddScoped<ITokenRepository, TokenService>();
 builder.Services.AddScoped<IPropertyRepository, PropertyService>();
 builder.Services.AddScoped<IStudentRepository, StudentService>();
 builder.Services.AddScoped<IImageRepository, ImageService>();
+builder.Services.AddScoped<ICollegeRepository, CollegeService>();
 
 
 

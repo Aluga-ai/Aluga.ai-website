@@ -123,7 +123,6 @@ namespace BackEndASP.Migrations
                     Hobbies = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PendentsConnectionsId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CollegeId = table.Column<int>(type: "int", nullable: true),
-                    BuildingId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -294,6 +293,31 @@ namespace BackEndASP.Migrations
                     { "3", null, "Owner", "OWNER" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "ImageId", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "6c2c7435-be22-4cb4-8819-c2830d6348be", 0, "6f015a5d-bb1d-49d5-aeb1-4bdac0540cbb", "User", "student@gmail.com", true, null, false, null, "STUDENT@GMAIL.COM", "STUDENT", "AQAAAAIAAYagAAAAENwFKj5BvqIounCNg0zFWmF5Vxw9SWetRiVnCyma8iklFr5aFePSDxpn41l35eG0XA==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c63eae08-5ae2-43cc-be7f-535c0abca6c3", false, "Student" },
+                    { "6ceb710a-c93e-4084-be34-8d1d74299e3d", 0, "989b9254-12cd-4792-a247-cbc46bbd7f5f", "User", "admin@gmail.com", true, null, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEHRVhqA1JfaFgJdQgoRB1pzPbBuzhSpdkrTl2CUKNtNPSKWur5hRKOs+Av6lGjurDg==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1b16b192-6267-4cd8-b256-bb00935d187c", false, "Admin" },
+                    { "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6", 0, "a38cb7df-b728-470f-be43-95346c30cc4c", "User", "owner@gmail.com", true, null, false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEGGKYdgzbOsvJKe8NGZw/dg3vMk9aJDDTPV0oLwxj73FqBDV+ycVkSK69n37Ba6pqQ==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "8e03865c-d0e3-4175-9275-e3b9e6b000fd", false, "Owner" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Buildings",
+                columns: new[] { "Id", "Address", "Discriminator", "District", "HomeComplement", "Lat", "Long", "Name", "Neighborhood", "Number", "State" },
+                values: new object[] { 1, "Rodovia Senador José Ermírio de Moraes", "College", "Sorocaba", "", "-23.4440154", "-47.3860489", "FACENS", "Iporanga", "", "SP" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "2", "6c2c7435-be22-4cb4-8819-c2830d6348be" },
+                    { "1", "6ceb710a-c93e-4084-be34-8d1d74299e3d" },
+                    { "3", "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -325,11 +349,6 @@ namespace BackEndASP.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_BuildingId",
-                table: "AspNetUsers",
-                column: "BuildingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CollegeId",
@@ -398,13 +417,6 @@ namespace BackEndASP.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Buildings_BuildingId",
-                table: "AspNetUsers",
-                column: "BuildingId",
-                principalTable: "Buildings",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Buildings_CollegeId",

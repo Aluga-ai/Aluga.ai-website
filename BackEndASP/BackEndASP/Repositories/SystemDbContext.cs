@@ -28,6 +28,7 @@ using Microsoft.EntityFrameworkCore.Storage;
         {
             Console.WriteLine(ex.Message);
         }
+        ///////
 
     }
 
@@ -51,11 +52,84 @@ using Microsoft.EntityFrameworkCore.Storage;
 
         modelBuilder.Entity<IdentityRole>().HasData(
             new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
-            new IdentityRole { Id = "2", Name = "Student", NormalizedName = "STUDENT" },
-            new IdentityRole { Id = "3", Name = "Owner", NormalizedName = "OWNER" }
+            new IdentityRole { Id = "3", Name = "Owner", NormalizedName = "OWNER" },
+            new IdentityRole { Id = "2", Name = "Student", NormalizedName = "STUDENT" }
         );
 
-        
+        // Seed college
+        modelBuilder.Entity<College>().HasData(
+            new College
+            {
+                Id = 1,
+                Address = "Rodovia Senador José Ermírio de Moraes",
+                District = "Sorocaba",
+                Name = "FACENS",
+                State = "SP",
+                HomeComplement = "",
+                Neighborhood = "Iporanga",
+                Number = "",
+                Lat = "-23.4440154",
+                Long = "-47.3860489"
+            }
+        );
+
+        // Seed users
+        var adminId = Guid.NewGuid().ToString();
+        var ownerId = Guid.NewGuid().ToString();
+        var studentId = Guid.NewGuid().ToString();
+
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = adminId,
+                Email = "admin@gmail.com",
+                UserName = "Admin",
+                NormalizedUserName = "ADMIN",
+                PasswordHash = new PasswordHasher<User>().HashPassword(null, "Senha#123"),
+                EmailConfirmed = true,
+                PhoneNumber = "999999999",
+                PhoneNumberConfirmed = true,
+                NormalizedEmail = "ADMIN@GMAIL.COM"
+            }
+        );
+
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = ownerId,
+                Email = "owner@gmail.com",
+                UserName = "Owner",
+                NormalizedUserName = "OWNER",
+                PasswordHash = new PasswordHasher<User>().HashPassword(null, "Senha#1233"), 
+                EmailConfirmed = true,
+                PhoneNumber = "999999999",
+                PhoneNumberConfirmed = true,
+                NormalizedEmail = "OWNER@GMAIL.COM"
+            }
+        );
+
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = studentId,
+                Email = "student@gmail.com",
+                UserName = "Student",
+                NormalizedUserName = "STUDENT",
+                PasswordHash = new PasswordHasher<User>().HashPassword(null, "Senha#123"), 
+                EmailConfirmed = true,
+                PhoneNumber = "999999999",
+                PhoneNumberConfirmed = true,
+                NormalizedEmail = "STUDENT@GMAIL.COM"
+            }
+        );
+
+        // Seed user roles
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string> { UserId = adminId, RoleId = "1" }, // Admin role
+            new IdentityUserRole<string> { UserId = ownerId, RoleId = "3" }, // Owner role
+            new IdentityUserRole<string> { UserId = studentId, RoleId = "2" } // Student role
+        );
+
         //modelBuilder.Entity<College>().ToTable("Colleges");
         //modelBuilder.Entity<Property>().ToTable("Properties");
         //modelBuilder.Entity<Owner>().ToTable("Owners");

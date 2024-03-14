@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndASP.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20240314174455_initial")]
+    [Migration("20240314194629_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -168,15 +168,15 @@ namespace BackEndASP.Migrations
                         },
                         new
                         {
-                            Id = "2",
-                            Name = "Student",
-                            NormalizedName = "STUDENT"
-                        },
-                        new
-                        {
                             Id = "3",
                             Name = "Owner",
                             NormalizedName = "OWNER"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
                         });
                 });
 
@@ -265,6 +265,23 @@ namespace BackEndASP.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "6ceb710a-c93e-4084-be34-8d1d74299e3d",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "6c2c7435-be22-4cb4-8819-c2830d6348be",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -409,6 +426,62 @@ namespace BackEndASP.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
 
                     b.UseTphMappingStrategy();
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "6ceb710a-c93e-4084-be34-8d1d74299e3d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "989b9254-12cd-4792-a247-cbc46bbd7f5f",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHRVhqA1JfaFgJdQgoRB1pzPbBuzhSpdkrTl2CUKNtNPSKWur5hRKOs+Av6lGjurDg==",
+                            PhoneNumber = "999999999",
+                            PhoneNumberConfirmed = true,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "1b16b192-6267-4cd8-b256-bb00935d187c",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a38cb7df-b728-470f-be43-95346c30cc4c",
+                            Email = "owner@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OWNER@GMAIL.COM",
+                            NormalizedUserName = "OWNER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGGKYdgzbOsvJKe8NGZw/dg3vMk9aJDDTPV0oLwxj73FqBDV+ycVkSK69n37Ba6pqQ==",
+                            PhoneNumber = "999999999",
+                            PhoneNumberConfirmed = true,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "8e03865c-d0e3-4175-9275-e3b9e6b000fd",
+                            TwoFactorEnabled = false,
+                            UserName = "Owner"
+                        },
+                        new
+                        {
+                            Id = "6c2c7435-be22-4cb4-8819-c2830d6348be",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6f015a5d-bb1d-49d5-aeb1-4bdac0540cbb",
+                            Email = "student@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT@GMAIL.COM",
+                            NormalizedUserName = "STUDENT",
+                            PasswordHash = "AQAAAAIAAYagAAAAENwFKj5BvqIounCNg0zFWmF5Vxw9SWetRiVnCyma8iklFr5aFePSDxpn41l35eG0XA==",
+                            PhoneNumber = "999999999",
+                            PhoneNumberConfirmed = true,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "c63eae08-5ae2-43cc-be7f-535c0abca6c3",
+                            TwoFactorEnabled = false,
+                            UserName = "Student"
+                        });
                 });
 
             modelBuilder.Entity("College", b =>
@@ -419,6 +492,21 @@ namespace BackEndASP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("College");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Rodovia Senador José Ermírio de Moraes",
+                            District = "Sorocaba",
+                            HomeComplement = "",
+                            Lat = "-23.4440154",
+                            Long = "-47.3860489",
+                            Neighborhood = "Iporanga",
+                            Number = "",
+                            State = "SP",
+                            Name = "FACENS"
+                        });
                 });
 
             modelBuilder.Entity("Property", b =>
@@ -444,9 +532,6 @@ namespace BackEndASP.Migrations
                 {
                     b.HasBaseType("User");
 
-                    b.Property<int?>("BuildingId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CollegeId")
                         .HasColumnType("int");
 
@@ -458,8 +543,6 @@ namespace BackEndASP.Migrations
 
                     b.Property<string>("Personalitys")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("BuildingId");
 
                     b.HasIndex("CollegeId");
 
@@ -599,21 +682,12 @@ namespace BackEndASP.Migrations
 
             modelBuilder.Entity("Student", b =>
                 {
-                    b.HasOne("Building", null)
-                        .WithMany("StudentsLiked")
-                        .HasForeignKey("BuildingId");
-
                     b.HasOne("College", "College")
                         .WithMany("Students")
                         .HasForeignKey("CollegeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("College");
-                });
-
-            modelBuilder.Entity("Building", b =>
-                {
-                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Image", b =>

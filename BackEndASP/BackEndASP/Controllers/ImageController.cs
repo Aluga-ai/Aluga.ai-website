@@ -1,5 +1,6 @@
 ﻿using BackEndASP.DTOs.ImageDTOs;
 using BackEndASP.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace BackEndASP.Controllers
 
 
         [HttpPost("user")]
+        [Authorize(Policy = "StudentOrOwner")]
         public async Task<ActionResult<dynamic>> InsertImageForAUser([FromForm] ImageUserInsertDTO dto)
         {
 
@@ -40,6 +42,7 @@ namespace BackEndASP.Controllers
 
 
         [HttpPost("building/{propertyId}")]
+        [Authorize(Policy = "Owner")]
         public async Task<ActionResult<dynamic>> InsertImageForBuilding([FromForm] ImageBuildingInsertDTO dto, int propertyId)
         {
             try
