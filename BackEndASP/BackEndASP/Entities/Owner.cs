@@ -2,5 +2,5 @@
     public class Owner : User
     {
 
-        public IEnumerable<Property>? Properties { get;} = new List<Property>();
+        public List<Property>? Properties { get;} = new List<Property>();
     }

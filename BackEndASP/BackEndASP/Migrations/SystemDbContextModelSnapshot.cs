@@ -589,8 +589,7 @@ namespace BackEndASP.Migrations
                 {
                     b.HasOne("Owner", "Owner")
                         .WithMany("Properties")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Owner");
                 });
@@ -603,7 +602,8 @@ namespace BackEndASP.Migrations
 
                     b.HasOne("College", "College")
                         .WithMany("Students")
-                        .HasForeignKey("CollegeId");
+                        .HasForeignKey("CollegeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("College");
                 });

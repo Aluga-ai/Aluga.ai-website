@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndASP.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20240313193515_inital")]
-    partial class inital
+    [Migration("20240314174455_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -592,8 +592,7 @@ namespace BackEndASP.Migrations
                 {
                     b.HasOne("Owner", "Owner")
                         .WithMany("Properties")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Owner");
                 });
@@ -606,7 +605,8 @@ namespace BackEndASP.Migrations
 
                     b.HasOne("College", "College")
                         .WithMany("Students")
-                        .HasForeignKey("CollegeId");
+                        .HasForeignKey("CollegeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("College");
                 });

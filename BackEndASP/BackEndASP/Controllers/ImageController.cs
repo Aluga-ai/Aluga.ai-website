@@ -12,12 +12,10 @@ namespace BackEndASP.Controllers
     public class ImageController : ControllerBase
     {
 
-        private readonly UserManager<User> _userManager;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
 
-        public ImageController(UserManager<User> userManager, IUnitOfWorkRepository unitOfWorkRepository)
+        public ImageController(IUnitOfWorkRepository unitOfWorkRepository)
         {
-            _userManager = userManager;
             _unitOfWorkRepository = unitOfWorkRepository;
         }
 
@@ -38,6 +36,24 @@ namespace BackEndASP.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+
+
+        [HttpPost("building/{propertyId}")]
+        public async Task<ActionResult<dynamic>> InsertImageForBuilding([FromForm] ImageBuildingInsertDTO dto, int propertyId)
+        {
+            try
+            {
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                await _unitOfWorkRepository.ImageRepository.InsertImageForBuilding(dto, userId, propertyId);
+                await _unitOfWorkRepository.CommitAsync();
+                return Ok("Image saved successfuly");
+
+            } catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

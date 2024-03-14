@@ -20,7 +20,7 @@ var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=True";
-builder.Services.AddDbContext<SystemDbContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<SystemDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 //builder.Configuration.GetConnectionString("DefaultConnection"))
 /* ===================================== */
 

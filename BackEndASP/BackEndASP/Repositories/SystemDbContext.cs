@@ -73,19 +73,7 @@ using Microsoft.EntityFrameworkCore.Storage;
             .HasOne(s => s.College)
             .WithMany(c => c.Students)
             .HasForeignKey(s => s.CollegeId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        modelBuilder.Entity<Property>()
-            .HasOne(p => p.Owner)
-            .WithMany(o => o.Properties)
-            .HasForeignKey(p => p.OwnerId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        modelBuilder.Entity<Owner>()
-            .HasMany(o => o.Properties)
-            .WithOne(p => p.Owner)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<PropertyStudent>()
             .HasKey(sp => new { sp.StudentId, sp.PropertyId });
@@ -116,6 +104,8 @@ using Microsoft.EntityFrameworkCore.Storage;
             .WithMany()
             .HasForeignKey(uc => uc.OtherStudentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 
 }
