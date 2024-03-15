@@ -68,14 +68,14 @@ namespace BackEndASP.Controllers
 
 
         // estudante aceitando ou recusando o pedido de conexão
-        [HttpPost]
+        [HttpPost("{notificationId}")]
         [Authorize(Policy = "StudentOnly")]
-        public async Task<ActionResult<dynamic>> GiveConnectionOrder([FromBody] StudentConnectionInsertDTO dto)
+        public async Task<ActionResult<dynamic>> GiveConnectionOrder([FromBody] StudentConnectionInsertDTO dto, int notificationId)
         {
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var result = await _unitOfWorkRepository.StudentRepository.HandleConnection(userId, dto);
+                var result = await _unitOfWorkRepository.StudentRepository.HandleConnection(userId, dto, notificationId);
                 await _unitOfWorkRepository.CommitAsync();
                 if (!result)
                 {

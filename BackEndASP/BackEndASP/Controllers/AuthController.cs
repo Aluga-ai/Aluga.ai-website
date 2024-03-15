@@ -224,7 +224,8 @@ using System.Security.Claims;
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerDTO.Username,
                 PhoneNumber = registerDTO.PhoneNumber,
-                PhoneNumberConfirmed = false
+                PhoneNumberConfirmed = false,
+                BirthDate = registerDTO.BirthDate
             };
 
             // Tenta criar o usuário
@@ -284,7 +285,8 @@ using System.Security.Claims;
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = registerDTO.Username,
             PhoneNumber = registerDTO.PhoneNumber,
-            PhoneNumberConfirmed = false
+            PhoneNumberConfirmed = false,
+            BirthDate = registerDTO.BirthDate
         };
 
 

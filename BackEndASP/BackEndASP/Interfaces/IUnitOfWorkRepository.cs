@@ -9,6 +9,7 @@
         IOwnerRepository OwnerRepository { get; }
         IPropertyRepository PropertyRepository { get; }
         IStudentRepository StudentRepository { get; }
+        IBuildingRepository BuildingRepository { get; }
 
 
         Task CommitAsync();

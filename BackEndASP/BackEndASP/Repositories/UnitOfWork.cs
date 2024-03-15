@@ -1,7 +1,4 @@
-﻿
-
-
-using BackEndASP.Interfaces;
+﻿using BackEndASP.Interfaces;
 using BackEndASP.Services;
 
 public class UnitOfWork : IUnitOfWorkRepository
@@ -9,7 +6,8 @@ public class UnitOfWork : IUnitOfWorkRepository
         private IPropertyRepository _propertyRepository;
         private IStudentRepository _studentRepository;
         private IImageRepository _imageRepository;
-    private ICollegeRepository _collegeRepository;    
+        private ICollegeRepository _collegeRepository;    
+        private IBuildingRepository _buildingRepository;
 
         private SystemDbContext _dbContext;
 
@@ -32,6 +30,8 @@ public class UnitOfWork : IUnitOfWorkRepository
     public IPropertyRepository PropertyRepository { get { return _propertyRepository = _propertyRepository ?? new PropertyService(_dbContext); } }
 
     public IStudentRepository StudentRepository { get { return _studentRepository = _studentRepository ?? new StudentService(_dbContext); } }
+
+    public IBuildingRepository BuildingRepository { get { return _buildingRepository = _buildingRepository ?? new BuildingService(); } }
 
     public async Task CommitAsync()
         {

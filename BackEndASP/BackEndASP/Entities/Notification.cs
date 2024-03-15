@@ -1,5 +1,7 @@
 ﻿
-    public class Notification
+using BackEndASP.Entities;
+
+public class Notification
     {
         public int Id { get; set; }
 
@@ -9,6 +11,6 @@
 
         public bool Read { get; set; } = false;
 
-        public IEnumerable<User> Users { get;} = Enumerable.Empty<User>();
-    }
+        public ICollection<UserNotifications>? UserNotifications { get; set; } = new List<UserNotifications>();
+}
 

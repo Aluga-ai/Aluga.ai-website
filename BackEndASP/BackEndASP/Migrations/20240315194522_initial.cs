@@ -117,6 +117,8 @@ namespace BackEndASP.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BirthDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Personalitys = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -170,8 +172,8 @@ namespace BackEndASP.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HomeComplement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomeComplement = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -179,6 +181,8 @@ namespace BackEndASP.Migrations
                     Long = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    Rooms = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -189,30 +193,6 @@ namespace BackEndASP.Migrations
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NotificationUser",
-                columns: table => new
-                {
-                    NotificationsId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationUser", x => new { x.NotificationsId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_NotificationUser_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NotificationUser_Notifications_NotificationsId",
-                        column: x => x.NotificationsId,
-                        principalTable: "Notifications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +217,30 @@ namespace BackEndASP.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NotificationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => new { x.UserId, x.NotificationId });
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -295,12 +299,12 @@ namespace BackEndASP.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "ImageId", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreatedDate", "Discriminator", "Email", "EmailConfirmed", "ImageId", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6c2c7435-be22-4cb4-8819-c2830d6348be", 0, "6f015a5d-bb1d-49d5-aeb1-4bdac0540cbb", "User", "student@gmail.com", true, null, false, null, "STUDENT@GMAIL.COM", "STUDENT", "AQAAAAIAAYagAAAAENwFKj5BvqIounCNg0zFWmF5Vxw9SWetRiVnCyma8iklFr5aFePSDxpn41l35eG0XA==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c63eae08-5ae2-43cc-be7f-535c0abca6c3", false, "Student" },
-                    { "6ceb710a-c93e-4084-be34-8d1d74299e3d", 0, "989b9254-12cd-4792-a247-cbc46bbd7f5f", "User", "admin@gmail.com", true, null, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEHRVhqA1JfaFgJdQgoRB1pzPbBuzhSpdkrTl2CUKNtNPSKWur5hRKOs+Av6lGjurDg==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1b16b192-6267-4cd8-b256-bb00935d187c", false, "Admin" },
-                    { "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6", 0, "a38cb7df-b728-470f-be43-95346c30cc4c", "User", "owner@gmail.com", true, null, false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEGGKYdgzbOsvJKe8NGZw/dg3vMk9aJDDTPV0oLwxj73FqBDV+ycVkSK69n37Ba6pqQ==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "8e03865c-d0e3-4175-9275-e3b9e6b000fd", false, "Owner" }
+                    { "59617b75-ef5b-40f3-b018-154350d82ada", 0, new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 314, DateTimeKind.Unspecified).AddTicks(4722), new TimeSpan(0, -3, 0, 0, 0)), "324c519e-9e94-49e9-8ca3-c5c1271f5b45", new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 248, DateTimeKind.Unspecified).AddTicks(264), new TimeSpan(0, 0, 0, 0, 0)), "User", "student@gmail.com", true, null, false, null, "STUDENT@GMAIL.COM", "STUDENT", "AQAAAAIAAYagAAAAELdOEkLT5g2OpqCX3R7CkNHg+aC8NK9/L+Zwat9G9ghROEwFiN25S/JCU/jz188C1Q==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c3a5aa09-9764-448f-9360-0f834750bb5f", false, "Student" },
+                    { "c2067610-cd11-424a-ae30-53f9a1b349ff", 0, new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 180, DateTimeKind.Unspecified).AddTicks(7753), new TimeSpan(0, -3, 0, 0, 0)), "9fe29a6a-478a-449e-8918-65e6a1092c8c", new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 113, DateTimeKind.Unspecified).AddTicks(1692), new TimeSpan(0, 0, 0, 0, 0)), "User", "admin@gmail.com", true, null, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEAk3whglIk6z/BKPTP9LfJrCIhb+kt0A5vLV49TV33hJxoA3bfygaf9tEUh3enVJ3w==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c0b026d3-9d8f-4a5c-be24-c3912da77985", false, "Admin" },
+                    { "ecc65b83-e781-45be-a56d-43048a592371", 0, new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 247, DateTimeKind.Unspecified).AddTicks(9730), new TimeSpan(0, -3, 0, 0, 0)), "b797dd9e-c80c-4d21-bec4-a0ac187c31a1", new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 180, DateTimeKind.Unspecified).AddTicks(8040), new TimeSpan(0, 0, 0, 0, 0)), "User", "owner@gmail.com", true, null, false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEMuo4JdOvYBGuVHCJQD+TLWFoTkZUp0nojcQ4y3Dt62/8f4P132nCmh5VUs3c/jLqQ==", "999999999", true, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3d97a00b-4246-4d0e-a869-317c4ca1e296", false, "Owner" }
                 });
 
             migrationBuilder.InsertData(
@@ -313,9 +317,9 @@ namespace BackEndASP.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "2", "6c2c7435-be22-4cb4-8819-c2830d6348be" },
-                    { "1", "6ceb710a-c93e-4084-be34-8d1d74299e3d" },
-                    { "3", "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6" }
+                    { "2", "59617b75-ef5b-40f3-b018-154350d82ada" },
+                    { "1", "c2067610-cd11-424a-ae30-53f9a1b349ff" },
+                    { "3", "ecc65b83-e781-45be-a56d-43048a592371" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -380,11 +384,6 @@ namespace BackEndASP.Migrations
                 column: "BuildingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotificationUser_UsersId",
-                table: "NotificationUser",
-                column: "UsersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StudentProperties_PropertyId",
                 table: "StudentProperties",
                 column: "PropertyId");
@@ -393,6 +392,11 @@ namespace BackEndASP.Migrations
                 name: "IX_UserConnections_OtherStudentId",
                 table: "UserConnections",
                 column: "OtherStudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -457,13 +461,13 @@ namespace BackEndASP.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "NotificationUser");
-
-            migrationBuilder.DropTable(
                 name: "StudentProperties");
 
             migrationBuilder.DropTable(
                 name: "UserConnections");
+
+            migrationBuilder.DropTable(
+                name: "UserNotifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

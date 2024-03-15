@@ -1,5 +1,5 @@
 ﻿
-using BackEndASP.DTOs.CollegeDTOs;
+using BackEndASP.DTOs.BuildingDTOs;
 using BackEndASP.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +24,9 @@ namespace BackEndASP.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<dynamic>> InsertNewCollege([FromBody] CollegeInsertDTO dto)
+        public async Task<ActionResult<dynamic>> InsertCollege([FromBody] BuildingInsertDTO dto)
         {
-            await _unitOfWorkRepository.CollegeRepository.InsertNewCollege(dto);
+            await _unitOfWorkRepository.CollegeRepository.InsertCollege(dto);
             await _unitOfWorkRepository.CommitAsync();
             return Ok("College created successfully");
         }

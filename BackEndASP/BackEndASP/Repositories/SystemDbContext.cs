@@ -42,6 +42,7 @@ using Microsoft.EntityFrameworkCore.Storage;
         public DbSet<User> Users { get; set; }
         public DbSet<PropertyStudent> StudentProperties { get; set; }
         public DbSet<UserConnection> UserConnections { get; set; }
+        public DbSet<UserNotifications> UserNotifications { get; set; }
 
 
     [Obsolete]
@@ -89,7 +90,8 @@ using Microsoft.EntityFrameworkCore.Storage;
                 EmailConfirmed = true,
                 PhoneNumber = "999999999",
                 PhoneNumberConfirmed = true,
-                NormalizedEmail = "ADMIN@GMAIL.COM"
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                BirthDate = DateTimeOffset.Now
             }
         );
 
@@ -100,11 +102,12 @@ using Microsoft.EntityFrameworkCore.Storage;
                 Email = "owner@gmail.com",
                 UserName = "Owner",
                 NormalizedUserName = "OWNER",
-                PasswordHash = new PasswordHasher<User>().HashPassword(null, "Senha#1233"), 
+                PasswordHash = new PasswordHasher<User>().HashPassword(null, "Senha#123"), 
                 EmailConfirmed = true,
                 PhoneNumber = "999999999",
                 PhoneNumberConfirmed = true,
-                NormalizedEmail = "OWNER@GMAIL.COM"
+                NormalizedEmail = "OWNER@GMAIL.COM",
+                BirthDate = DateTimeOffset.Now
             }
         );
 
@@ -119,7 +122,8 @@ using Microsoft.EntityFrameworkCore.Storage;
                 EmailConfirmed = true,
                 PhoneNumber = "999999999",
                 PhoneNumberConfirmed = true,
-                NormalizedEmail = "STUDENT@GMAIL.COM"
+                NormalizedEmail = "STUDENT@GMAIL.COM",
+                BirthDate = DateTimeOffset.Now
             }
         );
 
@@ -157,6 +161,7 @@ using Microsoft.EntityFrameworkCore.Storage;
             .WithMany(s => s.StudentProperties)
             .HasForeignKey(sp => sp.StudentId);
 
+
         modelBuilder.Entity<PropertyStudent>()
             .HasOne(sp => sp.Property)
             .WithMany(p => p.StudentProperties)
@@ -178,6 +183,21 @@ using Microsoft.EntityFrameworkCore.Storage;
             .WithMany()
             .HasForeignKey(uc => uc.OtherStudentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+
+
+        modelBuilder.Entity<UserNotifications>()
+            .HasKey(un => new { un.UserId, un.NotificationId });
+
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.UserNotifications)
+            .WithOne(un => un.User);
+
+        modelBuilder.Entity<Notification>()
+            .HasMany(n => n.UserNotifications)
+            .WithOne(us => us.Notification);
+
 
 
     }

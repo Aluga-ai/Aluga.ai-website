@@ -43,7 +43,7 @@ builder.Services.AddScoped<IPropertyRepository, PropertyService>();
 builder.Services.AddScoped<IStudentRepository, StudentService>();
 builder.Services.AddScoped<IImageRepository, ImageService>();
 builder.Services.AddScoped<ICollegeRepository, CollegeService>();
-
+builder.Services.AddScoped<IBuildingRepository, BuildingService>();
 
 
 
@@ -74,8 +74,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("OwnerOnly", policy => policy.RequireRole("Owner"));
-    options.AddPolicy("StudentOnly", policy => policy.RequireRole("Student"));
+    options.AddPolicy("OwnerOnly", policy => policy.RequireRole("Owner", "Admin"));
+    options.AddPolicy("StudentOnly", policy => policy.RequireRole("Student", "Admin"));
     options.AddPolicy("StudentOrOwner", policy => policy.RequireRole("Student", "Owner"));
 });
 

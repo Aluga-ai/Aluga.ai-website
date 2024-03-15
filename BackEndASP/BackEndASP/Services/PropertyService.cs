@@ -2,6 +2,7 @@
 using BackEndASP.ExternalAPI;
 using BackEndASP.ExternalAPI.GeoCoder;
 using BackEndASP.Interfaces;
+using BackEndASP.Utils;
 using Correios.NET.Models;
 using Geocoding;
 using Geocoding.Google;
@@ -17,36 +18,23 @@ namespace BackEndASP.Services
     {
 
         private readonly SystemDbContext _dbContext;
-        private readonly string _key = "AIzaSyBl9tDHzTnO6-Nw8tmUNc_gjv5xAoh6Saw";
 
         public PropertyService(SystemDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<BuildingResponseDTO> GetAddressByCep(string cep)
-        {
-            try
-            {
-                var address = new Correios.NET.CorreiosService().GetAddresses(cep).FirstOrDefault() ?? throw new Exception("Cep does not exists");
-                return new BuildingResponseDTO(address);
 
-            } catch (Exception ex)
-            {
-                throw new Exception("Failed to call this API");
-            }
-        }
-
-        public async Task<BuildingDTO> InsertBuilding(BuildingInsertDTO dto, User user)
+        public Task InsertProperty(BuildingInsertDTO dto, User user)
         {
              Property entity = new Property();
              copyDTOToEntity(dto, entity, user);
 
                 
              var targetUrl = $"https://maps.googleapis.com/maps/api/geocode/json" +
-               $"?address={ConvertAddress(dto)}" +
+               $"?address={ConvertAddress.Convert(dto)}" +
                $"&inputtype=textquery&fields=geometry" +
-               $"&key={_key}";
+               $"&key={APIKey.key}";
 
              var json = new WebClient().DownloadString(targetUrl);
           
@@ -57,7 +45,7 @@ namespace BackEndASP.Services
             entity.Long = response.results[0].geometry.location.lng;
 
             _dbContext.Properties.Add(entity);
-            return new BuildingDTO(entity);
+            return Task.CompletedTask;
 
         }
 
@@ -70,13 +58,11 @@ namespace BackEndASP.Services
             entity.Number = dto.Number;
             entity.HomeComplement = dto.HomeComplement;
             entity.OwnerId = user.Id;
+            entity.Rooms = dto.Rooms;
+            entity.Price = dto.Price;
         }
 
-        private string ConvertAddress(BuildingInsertDTO dto)
-        {
-            var data = $"{dto.Number} {dto.Address} {dto.District} {dto.State} Brasil";
-            return Uri.EscapeDataString(data);
-        }
+        
 
 
         

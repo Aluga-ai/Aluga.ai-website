@@ -5,9 +5,7 @@ namespace BackEndASP.Interfaces
 {
     public interface IPropertyRepository
     {
-        Task<BuildingResponseDTO> GetAddressByCep(string cep);
-
-        Task<BuildingDTO> InsertBuilding(BuildingInsertDTO dto, User user);
+        Task InsertProperty(BuildingInsertDTO dto, User user);
 
     }
 }

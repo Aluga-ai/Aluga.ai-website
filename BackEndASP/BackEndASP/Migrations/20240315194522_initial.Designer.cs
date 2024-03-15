@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndASP.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20240314194629_initial")]
+    [Migration("20240315194522_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -54,6 +54,21 @@ namespace BackEndASP.Migrations
                     b.ToTable("UserConnections");
                 });
 
+            modelBuilder.Entity("BackEndASP.Entities.UserNotifications", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "NotificationId");
+
+                    b.HasIndex("NotificationId");
+
+                    b.ToTable("UserNotifications");
+                });
+
             modelBuilder.Entity("Building", b =>
                 {
                     b.Property<int>("Id")
@@ -76,7 +91,6 @@ namespace BackEndASP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomeComplement")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lat")
@@ -92,7 +106,6 @@ namespace BackEndASP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
@@ -269,17 +282,17 @@ namespace BackEndASP.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "6ceb710a-c93e-4084-be34-8d1d74299e3d",
+                            UserId = "c2067610-cd11-424a-ae30-53f9a1b349ff",
                             RoleId = "1"
                         },
                         new
                         {
-                            UserId = "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6",
+                            UserId = "ecc65b83-e781-45be-a56d-43048a592371",
                             RoleId = "3"
                         },
                         new
                         {
-                            UserId = "6c2c7435-be22-4cb4-8819-c2830d6348be",
+                            UserId = "59617b75-ef5b-40f3-b018-154350d82ada",
                             RoleId = "2"
                         });
                 });
@@ -326,21 +339,6 @@ namespace BackEndASP.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("NotificationUser", b =>
-                {
-                    b.Property<int>("NotificationsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("NotificationsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("NotificationUser");
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<string>("Id")
@@ -349,9 +347,15 @@ namespace BackEndASP.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("BirthDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -430,55 +434,61 @@ namespace BackEndASP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6ceb710a-c93e-4084-be34-8d1d74299e3d",
+                            Id = "c2067610-cd11-424a-ae30-53f9a1b349ff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "989b9254-12cd-4792-a247-cbc46bbd7f5f",
+                            BirthDate = new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 180, DateTimeKind.Unspecified).AddTicks(7753), new TimeSpan(0, -3, 0, 0, 0)),
+                            ConcurrencyStamp = "9fe29a6a-478a-449e-8918-65e6a1092c8c",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 113, DateTimeKind.Unspecified).AddTicks(1692), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHRVhqA1JfaFgJdQgoRB1pzPbBuzhSpdkrTl2CUKNtNPSKWur5hRKOs+Av6lGjurDg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAk3whglIk6z/BKPTP9LfJrCIhb+kt0A5vLV49TV33hJxoA3bfygaf9tEUh3enVJ3w==",
                             PhoneNumber = "999999999",
                             PhoneNumberConfirmed = true,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "1b16b192-6267-4cd8-b256-bb00935d187c",
+                            SecurityStamp = "c0b026d3-9d8f-4a5c-be24-c3912da77985",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
                         new
                         {
-                            Id = "bc1f3bf7-ed6e-4afe-85e1-ca6b51334db6",
+                            Id = "ecc65b83-e781-45be-a56d-43048a592371",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a38cb7df-b728-470f-be43-95346c30cc4c",
+                            BirthDate = new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 247, DateTimeKind.Unspecified).AddTicks(9730), new TimeSpan(0, -3, 0, 0, 0)),
+                            ConcurrencyStamp = "b797dd9e-c80c-4d21-bec4-a0ac187c31a1",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 180, DateTimeKind.Unspecified).AddTicks(8040), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "owner@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGGKYdgzbOsvJKe8NGZw/dg3vMk9aJDDTPV0oLwxj73FqBDV+ycVkSK69n37Ba6pqQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMuo4JdOvYBGuVHCJQD+TLWFoTkZUp0nojcQ4y3Dt62/8f4P132nCmh5VUs3c/jLqQ==",
                             PhoneNumber = "999999999",
                             PhoneNumberConfirmed = true,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "8e03865c-d0e3-4175-9275-e3b9e6b000fd",
+                            SecurityStamp = "3d97a00b-4246-4d0e-a869-317c4ca1e296",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
                         new
                         {
-                            Id = "6c2c7435-be22-4cb4-8819-c2830d6348be",
+                            Id = "59617b75-ef5b-40f3-b018-154350d82ada",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6f015a5d-bb1d-49d5-aeb1-4bdac0540cbb",
+                            BirthDate = new DateTimeOffset(new DateTime(2024, 3, 15, 16, 45, 15, 314, DateTimeKind.Unspecified).AddTicks(4722), new TimeSpan(0, -3, 0, 0, 0)),
+                            ConcurrencyStamp = "324c519e-9e94-49e9-8ca3-c5c1271f5b45",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 15, 19, 45, 15, 248, DateTimeKind.Unspecified).AddTicks(264), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "student@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "STUDENT@GMAIL.COM",
                             NormalizedUserName = "STUDENT",
-                            PasswordHash = "AQAAAAIAAYagAAAAENwFKj5BvqIounCNg0zFWmF5Vxw9SWetRiVnCyma8iklFr5aFePSDxpn41l35eG0XA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELdOEkLT5g2OpqCX3R7CkNHg+aC8NK9/L+Zwat9G9ghROEwFiN25S/JCU/jz188C1Q==",
                             PhoneNumber = "999999999",
                             PhoneNumberConfirmed = true,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "c63eae08-5ae2-43cc-be7f-535c0abca6c3",
+                            SecurityStamp = "c3a5aa09-9764-448f-9360-0f834750bb5f",
                             TwoFactorEnabled = false,
                             UserName = "Student"
                         });
@@ -515,6 +525,12 @@ namespace BackEndASP.Migrations
 
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Rooms")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("OwnerId");
 
@@ -587,6 +603,25 @@ namespace BackEndASP.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("BackEndASP.Entities.UserNotifications", b =>
+                {
+                    b.HasOne("Notification", "Notification")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("User", "User")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Image", b =>
                 {
                     b.HasOne("Building", "Building")
@@ -647,21 +682,6 @@ namespace BackEndASP.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NotificationUser", b =>
-                {
-                    b.HasOne("Notification", null)
-                        .WithMany()
-                        .HasForeignKey("NotificationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.HasOne("Image", "Image")
@@ -693,6 +713,16 @@ namespace BackEndASP.Migrations
             modelBuilder.Entity("Image", b =>
                 {
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Notification", b =>
+                {
+                    b.Navigation("UserNotifications");
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.Navigation("UserNotifications");
                 });
 
             modelBuilder.Entity("College", b =>

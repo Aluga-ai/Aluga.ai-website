@@ -1,9 +1,9 @@
-﻿using BackEndASP.DTOs.CollegeDTOs;
+﻿using BackEndASP.DTOs.BuildingDTOs;
 
 namespace BackEndASP.Interfaces
 {
     public interface ICollegeRepository
     {
-        Task InsertNewCollege(CollegeInsertDTO dto);
+        Task InsertCollege(BuildingInsertDTO dto);
     }
 }
