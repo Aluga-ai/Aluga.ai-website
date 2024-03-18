@@ -1,4 +1,5 @@
-﻿using BackEndASP.DTOs.StudentDTOs;
+﻿using ApiCatalogo.Pagination;
+using BackEndASP.DTOs.StudentDTOs;
 using BackEndASP.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,21 @@ namespace BackEndASP.Controllers
             _userManager = userManager;
         }
 
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentGetAllFilterDTO>>> GetAllStudents([FromQuery] PageQueryParams pageQueryParams)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return Ok(await _unitOfWorkRepository.StudentRepository.FindAllStudentsAsync(pageQueryParams, userId));
+            }
+            catch (Exception e)
+            {
+                return NotFound("Resource not found");
+            }
+        }
 
 
         [HttpGet("/myconnections")]
@@ -88,6 +104,7 @@ namespace BackEndASP.Controllers
                 return BadRequest(ex);
             }
         }
+
 
     }
 }

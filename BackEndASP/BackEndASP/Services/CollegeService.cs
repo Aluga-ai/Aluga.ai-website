@@ -2,6 +2,7 @@
 using BackEndASP.ExternalAPI.GeoCoder;
 using BackEndASP.Interfaces;
 using BackEndASP.Utils;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -16,6 +17,8 @@ namespace BackEndASP.Services
         {
             _dbContext = dbContext;
         }
+
+       
 
         public Task InsertCollege(BuildingInsertDTO dto)
         {
@@ -39,6 +42,25 @@ namespace BackEndASP.Services
             _dbContext.Colleges.Add(entity);
             return Task.CompletedTask;
         }
+
+
+        public Task AddUserToCollege(int collegeId, string userId)
+        {
+            Student student = _dbContext.Students
+                .Include(s => s.College)
+                .AsNoTracking().FirstOrDefault(s => s.Id == userId)
+                ?? throw new ArgumentException($"This id {userId} does not exist");
+
+            College college = _dbContext.Colleges.AsNoTracking().FirstOrDefault(c => c.Id == collegeId) 
+                ?? throw new ArgumentException($"This id {collegeId} does not exist");
+
+            student.College = college;
+            _dbContext.Students.Update(student);
+            return Task.CompletedTask;
+        }
+
+
+
 
         private void copyDTOToEntity(BuildingInsertDTO dto, College entity)
         {

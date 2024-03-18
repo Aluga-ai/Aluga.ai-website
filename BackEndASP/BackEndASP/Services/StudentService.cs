@@ -1,4 +1,5 @@
-﻿using BackEndASP.DTOs.StudentDTOs;
+﻿using ApiCatalogo.Pagination;
+using BackEndASP.DTOs.StudentDTOs;
 using BackEndASP.Entities;
 using BackEndASP.Interfaces;
 using Geocoding;
@@ -16,6 +17,47 @@ namespace BackEndASP.Services
             _dbContext = dbContext;
         }
 
+
+        // busca todos o usuários com filtros de paginação, idade, faculdade, etc
+        public async Task<IEnumerable<StudentGetAllFilterDTO>> FindAllStudentsAsync(PageQueryParams pageQueryParams, string userId)
+        {
+            DateTime initialAge = DateTime.Today.AddYears(-pageQueryParams.InitialAge);
+            DateTime finalAge = DateTime.Today.AddYears(-pageQueryParams.FinalAge);
+
+
+            IQueryable<Student> query = _dbContext.Students.Include(s => s.College).AsNoTracking();
+
+
+            if (pageQueryParams.OwnCollege)
+            {
+                Student student = await query.FirstOrDefaultAsync(s => s.Id == userId) ?? throw new ArgumentException($"This id {userId} does not exist");
+
+                int? collegeId = student.CollegeId;
+
+                query = query.Where(s => s.CollegeId == collegeId);
+            }
+
+            if (!string.IsNullOrEmpty(pageQueryParams.Name))
+            {
+                query = query.Where(s => s.UserName.ToUpper().Contains(pageQueryParams.Name.ToUpper()));
+            }
+
+            query = query.Where(s => s.BirthDate <= initialAge && s.BirthDate >= finalAge);
+
+            query = query.Skip((pageQueryParams.PageNumber - 1) * pageQueryParams.PageSize).Take(pageQueryParams.PageSize);
+
+            query = query.Where(s => s.Id != userId);
+
+            List<StudentGetAllFilterDTO> result = await query.Select(s => new StudentGetAllFilterDTO(s)).ToListAsync();
+
+            return result;
+        }
+
+
+
+
+
+
         // busca todas minhas conexões
         public StudentsConnectionsDTO FindAllMyStudentsConnections(string userId)
         {
@@ -26,6 +68,8 @@ namespace BackEndASP.Services
 
             return new StudentsConnectionsDTO(student.Connections);
         }
+
+        
 
         //busca todas as solicitações que eu tenho pendente
         public StudentsConnectionsDTO FindMyAllStudentsWhoInvitationsConnections(string userId)
