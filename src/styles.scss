@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+//@import "tailwindcss/base";
+//@import "tailwindcss/utilities";
+//@import "tailwindcss/components";
+$primary-orange-color: #F79009;
+
+html,
+body, p, h1, h2, h3, h4{
+    margin: 0;
+    padding: 0;
+}
+
+html,body, app-root{
+    height: 100%;
+}
+
+app-root{
+    display: flex;
+    flex-direction: column;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

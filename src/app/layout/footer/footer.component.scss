@@ -1,0 +1,42 @@
+$primary-orange-color: #F79009;
+$nav-text-color: #344054;
+
+
+.bold{
+    font-weight: 500;
+    color:$nav-text-color;
+}
+.nav-font-size{
+    font-size: 20px;
+}
+
+.first-part-footer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.second-part-footer{
+    width: 80%;
+    margin: 0 auto;
+}
+.second-part-wrapper{
+    margin-top: 5vh;
+    display: flex;
+    justify-content: space-between;
+}
+.termos{
+    display: flex;
+    gap: 3vh;
+}
+.nav-items{
+    margin-top: 5vh;
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+}
+.logo{
+    width: 150px;
+    height: auto;
+}
