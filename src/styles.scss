@@ -3,7 +3,11 @@
 //@import "tailwindcss/utilities";
 //@import "tailwindcss/components";
 
-
+:root{
+    --primary-orange-color: #F79009;
+    --nav-text-color: #344054;
+    --teste: red;
+}
 
 html,
 body, p, h1, h2, h3, h4{

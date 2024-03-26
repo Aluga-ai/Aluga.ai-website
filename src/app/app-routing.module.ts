@@ -14,6 +14,36 @@ const routes: Routes = [
     component: HomeComponent,
     
   },
+  {
+    path: 'faculdades',
+    component: HomeComponent,
+    
+  },
+  {
+    path: 'universitarios',
+    component: HomeComponent,
+    
+  },
+  {
+    path: 'destaque-se',
+    component: HomeComponent,
+    
+  },
+  {
+    path: 'anuncie',
+    component: HomeComponent,
+    
+  },
+  {
+    path: 'entrar',
+    component: HomeComponent,
+    
+  },
+  {
+    path: 'registrar-se',
+    component: HomeComponent,
+    
+  },
  
 ];
 
