@@ -20,8 +20,6 @@ import {MatIconModule} from '@angular/material/icon';
     BrowserModule,
     AppRoutingModule,
     MatIconModule,
-   
-
   ],
   providers: [
     provideClientHydration(),
