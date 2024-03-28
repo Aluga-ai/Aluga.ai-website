@@ -10,6 +10,10 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {MatIconModule} from '@angular/material/icon';
 import { FeedCardComponent } from './feed-card/feed-card.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { MainRegisterComponent } from './register/main-register/main-register.component';
+import { AnuncianteRegisterComponent } from './register/anunciante-register/anunciante-register.component';
+import { UniversitarioRegisterComponent } from './register/universitario-register/universitario-register.component';
+
 
 @NgModule({
   declarations: [
@@ -18,6 +22,9 @@ import {MatChipsModule} from '@angular/material/chips';
     FooterComponent,
     HomeComponent,
     FeedCardComponent,
+    MainRegisterComponent,
+    AnuncianteRegisterComponent,
+    UniversitarioRegisterComponent,
   ],
   imports: [
     BrowserModule,
