@@ -44,16 +44,16 @@ const routes: Routes = [
 
   },
   {
-    path: 'registrar-se',
+    path: 'registrar',
     component: MainRegisterComponent,
   },
   {
-    path: 'registeruniversitario',
+    path: 'registrar/universitario',
     component: UniversitarioRegisterComponent,
 
   },
   {
-    path: 'registeranunciante',
+    path: 'registrar/anunciante',
     component: AnuncianteRegisterComponent,
 
   },
